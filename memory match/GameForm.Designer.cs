@@ -42,6 +42,7 @@
             Controls.Add(richTextBox1);
             Name = "GameForm";
             Text = "GameForm";
+            MouseMove += formMouseMove;
             ResumeLayout(false);
         }
 
