@@ -87,7 +87,7 @@
             Controls.Add(noCardPairs);
             Controls.Add(btnStartGame);
             Name = "MenuForm";
-            Text = "Form1";
+            Text = "Memory Match";
             ((System.ComponentModel.ISupportInitialize)noCardPairs).EndInit();
             ResumeLayout(false);
             PerformLayout();
