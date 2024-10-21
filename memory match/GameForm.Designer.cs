@@ -23,31 +23,21 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            richTextBox1 = new RichTextBox();
             SuspendLayout();
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(116, 48);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(419, 227);
-            richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "";
             // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(792, 486);
-            Controls.Add(richTextBox1);
             Name = "GameForm";
             Text = "GameForm";
+            Click += onFormClick;
+            KeyDown += formKeyDown;
             MouseMove += formMouseMove;
             ResumeLayout(false);
         }
 
         #endregion
-
-        private RichTextBox richTextBox1;
     }
 }

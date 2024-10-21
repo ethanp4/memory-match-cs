@@ -6,11 +6,10 @@ namespace memory_match {
 
         private void btnStartGame_Click(object sender, EventArgs e) {
             this.Hide();
-            var gameForm = new GameForm();
+            var cardPairs = (int)noCardPairs.Value;
+            var gameForm = new GameForm(cardPairs);
             gameForm.Closed += (s, args) => this.Close();
             gameForm.Show();
         }
-
-
     }
 }

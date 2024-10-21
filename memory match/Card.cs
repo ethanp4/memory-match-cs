@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace memory_match {
     //run logic then re-render frame every 16 ms
@@ -16,15 +18,25 @@ namespace memory_match {
         private static Dictionary<string, bool> cardsAvailability = new(); //this will contain each card combo (52) followed by if theyre used or not (default false)
         //this is used to avoid calling random repeatedly until the combination is unused
 
-        enum SUIT { clubs, spades, hearts, diamonds }
+        public enum SUIT { clubs, spades, hearts, diamonds }
         const int suitCount = 3;
-        enum VALUE { ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king }
+        public enum VALUE { ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king }
         const int valueCount = 12;
 
         private SUIT suit;
         private VALUE value;
+        public bool flippedOver = false; //true when clicked to see its type
+        public bool hoveredOver = false;
+        public bool collected = false; //when matched
+        public Rectangle rect;
 
-        static Card() { //populate cardsAvailability
+        public KeyValuePair<SUIT, VALUE> getInfo() {
+            return new KeyValuePair<SUIT, VALUE>(suit, value);
+        }
+
+        public static void resetLists() {
+            cardsList.Clear();
+            cardsAvailability.Clear();
             for (int i = 0; i <= suitCount; i++) {
                 for (int j = 0; j <= valueCount; j++) {
                     cardsAvailability.Add($"{i}{j}", true);
@@ -32,8 +44,34 @@ namespace memory_match {
             }
         }
 
-        public static List<Card> getCardsList() {
+        public static List<Card> getAllCards() {
             return cardsList;
+        }
+
+        public static List<Card> getPlayableCards() {
+            var ret = new List<Card>();
+            foreach(var c in cardsList) {
+                if (!c.collected) {
+                    ret.Add(c);
+                }
+            }
+            return ret;
+        }
+
+        public static List<Card> getCollectedCards() {
+            var ret = new List<Card>();
+            foreach(var c in cardsList) {
+                if (c.collected) {
+                    ret.Add(c);
+                }
+            }
+            return ret;
+        }
+
+        public static void shuffleList() {
+            var arr = cardsList.ToArray();
+            new Random().Shuffle(arr); // this operation is done in place
+            cardsList = new List<Card>(arr);
         }
 
         public static void createCardPair() {
@@ -54,8 +92,69 @@ namespace memory_match {
             this.value = v;
             cardsList.Add(this);
         }
+        public string[] toStringArray() {
+            string[] cardString = { "", "" };
+            switch (value) {
+                case Card.VALUE.ace:
+                    cardString[0] = "A";
+                    break;
+                case Card.VALUE.two:
+                    cardString[0] += 2;
+                    break;
+                case Card.VALUE.three:
+                    cardString[0] += 3;
+                    break;
+                case Card.VALUE.four:
+                    cardString[0] += 4;
+                    break;
+                case Card.VALUE.five:
+                    cardString[0] += 5;
+                    break;
+                case Card.VALUE.six:
+                    cardString[0] += 6;
+                    break;
+                case Card.VALUE.seven:
+                    cardString[0] += 7;
+                    break;
+                case Card.VALUE.eight:
+                    cardString[0] += 8;
+                    break;
+                case Card.VALUE.nine:
+                    cardString[0] += 9;
+                    break;
+                case Card.VALUE.ten:
+                    cardString[0] += 10;
+                    break;
+                case Card.VALUE.jack:
+                    cardString[0] += "J";
+                    break;
+                case Card.VALUE.king:
+                    cardString[0] += "K";
+                    break;
+                case Card.VALUE.queen:
+                    cardString[0] += "Q";
+                    break;
+            }
+            switch (suit) {
+                case Card.SUIT.spades:
+                    cardString[1] += "♠";
+                    break;
+                case Card.SUIT.clubs:
+                    cardString[1] += "♣";
+                    break;
+                case Card.SUIT.diamonds:
+                    cardString[1] += "♦";
+                    break;
+                case Card.SUIT.hearts:
+                    cardString[1] += "♥";
+                    break;
+            }
+            return cardString;
+        }
+
         public override string ToString() {
-            return $"This card is a {value} of {suit}\n";
+            var arr = toStringArray();
+            return $"{arr[0]}{arr[1]}";
         }
     }
 
